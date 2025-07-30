@@ -28,6 +28,17 @@ async function run() {
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+    // jobs related api
+    const jobsCollection = client.db('jobPortal').collection('jobs');
+
+    // Get all jobs
+    app.get('/jobs', async (req, res) => {  
+      const cursor = jobsCollection.find();
+      const jobs = await cursor.toArray();
+      res.send(jobs);
+    });
+
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close(); 
