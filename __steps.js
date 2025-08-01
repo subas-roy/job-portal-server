@@ -3,5 +3,5 @@
  * cd project-name - Change into the directory
  * npm init -y - Initialize a new npm project
  * npm i express cors dotenv mongodb - Install necessary packages
- * 
+ * create database & collection in MongoDB
  */
