@@ -55,6 +55,13 @@ async function run() {
       res.send(result);
     });
 
+    // get job applications by applicant email
+    app.get('/job-applications', async (req, res) => { 
+      const email = req.query.email;
+      const query = {applicant_email: email};
+      const result = await jobApplicationCollection.find(query).toArray();
+      res.send(result);
+    });
 
   } finally {
     // Ensures that the client will close when you finish/error
