@@ -34,7 +34,7 @@ async function run() {
     const jobApplicationCollection = client.db('jobPortal').collection('job_applications');
 
     // Get all jobs
-    app.get('/jobs', async (req, res) => {  
+    app.get('/jobs', async (req, res) => {
       const cursor = jobsCollection.find();
       const jobs = await cursor.toArray();
       res.send(jobs);
@@ -56,10 +56,23 @@ async function run() {
     });
 
     // get job applications by applicant email
-    app.get('/job-applications', async (req, res) => { 
+    app.get('/job-applications', async (req, res) => {
       const email = req.query.email;
-      const query = {applicant_email: email};
+      const query = { applicant_email: email };
       const result = await jobApplicationCollection.find(query).toArray();
+
+      // aggregate to get job details
+      for (const application of result) {
+        console.log(application.jobId);
+        const query1 = { _id: new ObjectId(application.jobId) };
+        const job1 = await jobsCollection.findOne(query1);
+
+        if (job1) {
+          application.title = job1.title;
+          application.company = job1.company;
+        }
+      }
+
       res.send(result);
     });
 
